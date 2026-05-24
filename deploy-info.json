@@ -1,0 +1,7 @@
+{
+  "name": "Resonance Morphing Substrate",
+  "entry": "index.html",
+  "sourceVault": "source-vault",
+  "deployment": "static repo scaffold",
+  "backend": "optional enhancement"
+}
