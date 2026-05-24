@@ -23,24 +23,23 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "Cleaning fake placeholder index if present"
-          if [ -f index.html ] && grep -q 'frontend_index.html' index.html; then
-            rm index.html
-          fi
+          echo "Cleaning old generated folders and placeholder index"
+          rm -f index.html
+          rm -rf extracted source-vault
 
-          mkdir -p extracted
+          ZIP_FILE=$(find . -maxdepth 4 -type f -name '*.zip' | head -n 1 || true)
 
-          ZIP_FILE=$(find . -maxdepth 2 -type f -name '*.zip' | head -n 1 || true)
           if [ -z "$ZIP_FILE" ]; then
             echo "ERROR: No ZIP file found."
-            find . -maxdepth 3 -type f | sort
+            find . -maxdepth 4 -type f | sort
             exit 1
           fi
 
-          echo "Unzipping $ZIP_FILE"
+          echo "Unzipping: $ZIP_FILE"
+          mkdir -p extracted
           unzip -o "$ZIP_FILE" -d extracted
 
-          echo "Available HTML files:"
+          echo "HTML files found:"
           find extracted -type f \( -iname '*.html' -o -iname '*.htm' \) | sort
 
           HTML_FILE=$(find extracted -type f -iname 'resonance-beef-morphos.html' | head -n 1 || true)
@@ -74,7 +73,7 @@ jobs:
           fi
 
           if [ -z "$HTML_FILE" ]; then
-            echo "ERROR: No HTML file found inside ZIP."
+            echo "ERROR: No HTML found inside ZIP."
             exit 1
           fi
 
@@ -86,18 +85,19 @@ jobs:
 
           touch .nojekyll
 
-          cat > deploy-info.json <<'JSON'
-          {
-            "name": "Resonance Morphing Substrate",
-            "entry": "index.html",
-            "sourceVault": "source-vault",
-            "deployment": "static repo scaffold",
-            "backend": "optional enhancement"
-          }
-JSON
+          printf '%s\n' \
+            '{' \
+            '  "name": "Resonance Morphing Substrate",' \
+            '  "entry": "index.html",' \
+            '  "sourceVault": "source-vault",' \
+            '  "deployment": "static repo scaffold",' \
+            '  "backend": "optional enhancement"' \
+            '}' > deploy-info.json
 
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+
           git add -A
-          git diff --cached --quiet || git commit -m "chore: unzip package and set morphing substrate index"
+          git status
+          git diff --cached --quiet || git commit -m "chore: unpack Resonance package and set substrate index"
           git push
