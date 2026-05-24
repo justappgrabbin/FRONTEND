@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Synthia Life — Agent Empire</title>
+<style>
+  :root {
+    --violet: #7c3aed;
+    --cyan: #06b6d4;
+    --dark: #0f0a1a;
+    --panel: #1a1025;
+    --text: #e0d5f0;
+    --muted: #8b7aa0;
+    --gate: #f59e0b;
+    --heart: #ec4899;
+    --mind: #06b6d4;
+    --body: #22c55e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    touch-action: manipulation;
+  }
+  #scene {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: radial-gradient(ellipse at 30% 70%, #1a0a2e 0%, #0f0a1a 60%, #050310 100%);
+    z-index: 1;
+  }
+  .room {
+    position: absolute;
+    border: 1px solid rgba(124,58,237,0.15);
+    border-radius: 12px;
+    background: rgba(26,16,37,0.6);
+    backdrop-filter: blur(4px);
+    transition: all 0.6s ease;
+    cursor: pointer;
+  }
+  .room:hover { border-color: var(--cyan); box-shadow: 0 0 20px rgba(6,182,212,0.2); }
+  .room-label {
+    position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .room-happiness {
+    position: absolute; top: 6px; right: 8px;
+    font-size: 9px; padding: 2px 6px; border-radius: 8px;
+    background: rgba(0,0,0,0.4);
+  }
+  .room-happiness.high { color: var(--body); }
+  .room-happiness.med { color: var(--gate); }
+  .room-happiness.low { color: var(--heart); }
+  .agent {
+    position: absolute;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .agent::after {
+    content: '';
+    position: absolute;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    animation: aura-pulse 3s ease-in-out infinite;
+  }
+  @keyframes aura-pulse {
+    0%,100% { transform: scale(0.8); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+  }
+  .agent.aura-mind::after { border-color: var(--mind); }
+  .agent.aura-body::after { border-color: var(--body); }
+  .agent.aura-heart::after { border-color: var(--heart); }
+  .agent.aura-gate::after { border-color: var(--gate); }
+  .agent-name {
+    position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; color: var(--text); white-space: nowrap;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+  .agent-mood {
+    position: absolute; top: -8px; right: -4px;
+    font-size: 12px;
+  }
+  .agent:hover { transform: scale(1.15); }
+  #bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 64px;
+    background: rgba(15,10,26,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(124,58,237,0.2);
+    display: flex; justify-content: space-around; align-items: center;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .nav-btn {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; color: var(--muted); font-size: 10px;
+    background: none; border: none; cursor: pointer;
+    transition: color 0.3s;
+    padding: 8px 12px;
+  }
+  .nav-btn.active { color: var(--cyan); }
+  .nav-btn svg { width: 22px; height: 22px; }
+  .panel {
+    position: fixed;
+    background: var(--panel);
+    border-radius: 20px 20px 0 0;
+    z-index: 90;
+    transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .panel-handle {
+    width: 40px; height: 4px; background: var(--muted);
+    border-radius: 2px; margin: 12px auto;
+    opacity: 0.5;
+  }
+  .panel-content { flex: 1; overflow-y: auto; padding: 0 20px 20px; }
+  .panel-header {
+    padding: 0 20px 12px;
+    font-size: 18px; font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #agent-panel { bottom: 64px; left: 0; right: 0; height: 70vh; transform: translateY(100%); }
+  #agent-panel.open { transform: translateY(0); }
+  #empire-panel { bottom: 64px; left: 0; right: 0; height: 80vh; transform: translateY(100%); }
+  #empire-panel.open { transform: translateY(0); }
+  #build-panel { bottom: 64px; left: 0; right: 0; height: 60vh; transform: translateY(100%); }
+  #build-panel.open { transform: translateY(0); }
+  .stat-row {
+    display: flex; align-items: center; gap: 10px;
+    margin: 8px 0; font-size: 13px;
+  }
+  .stat-bar {
+    flex: 1; height: 6px; background: rgba(255,255,255,0.08);
+    border-radius: 3px; overflow: hidden;
+  }
+  .stat-fill {
+    height: 100%; border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+  .gate-chip {
+    display: inline-block; padding: 3px 8px;
+    border-radius: 10px; font-size: 10px;
+    margin: 2px; border: 1px solid;
+  }
+  .center-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 8px; margin: 12px 0;
+  }
+  .center-cell {
+    padding: 10px; border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    text-align: center; font-size: 11px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .center-cell.active {
+    border-color: var(--gate);
+    background: rgba(245,158,11,0.08);
+  }
+  .center-cell .center-name { color: var(--muted); font-size: 9px; }
+  .center-cell .center-val { font-size: 16px; font-weight: 600; margin-top: 4px; }
+  .idea-card {
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 12px; padding: 14px;
+    margin: 8px 0;
+  }
+  .idea-card h4 { font-size: 13px; color: var(--cyan); margin-bottom: 6px; }
+  .idea-card p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .idea-meta {
+    display: flex; gap: 8px; margin-top: 8px;
+    font-size: 10px; color: var(--muted);
+  }
+  .btn {
+    padding: 8px 16px; border-radius: 8px;
+    border: none; font-size: 12px; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-primary { background: var(--violet); color: white; }
+  .btn-primary:active { transform: scale(0.95); }
+  .btn-cyan { background: var(--cyan); color: var(--dark); }
+  .btn-outline { background: transparent; border: 1px solid var(--violet); color: var(--text); }
+  .room-slot {
+    width: 80px; height: 80px;
+    border: 2px dashed rgba(124,58,237,0.3);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .room-slot:hover { border-color: var(--cyan); background: rgba(6,182,212,0.05); }
+  .room-slot.occupied {
+    border-style: solid; border-color: var(--gate);
+    background: rgba(245,158,11,0.08);
+  }
+  .log-entry {
+    font-size: 11px; padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: var(--muted);
+  }
+  .log-entry .time { color: var(--violet); font-size: 9px; margin-right: 6px; }
+  .log-entry.agent-action { color: var(--text); }
+  .log-entry.business { color: var(--gate); }
+  .log-entry.peer { color: var(--cyan); }
+  #overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  #overlay.active { display: flex; }
+  .modal {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 340px;
+    width: 100%;
+    border: 1px solid rgba(124,58,237,0.2);
+  }
+  .modal h3 { margin-bottom: 12px; font-size: 16px; }
+  .modal p { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .modal-input {
+    width: 100%; padding: 10px 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 8px; color: var(--text);
+    font-size: 13px; margin-bottom: 12px;
+  }
+  .modal-input:focus { outline: none; border-color: var(--cyan); }
+  #tooltip {
+    position: fixed; pointer-events: none;
+    background: var(--panel);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 8px; padding: 8px 12px;
+    font-size: 11px; color: var(--text);
+    z-index: 300; opacity: 0; transition: opacity 0.2s;
+    max-width: 200px;
+  }
+  #tooltip.visible { opacity: 1; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-thumb { background: var(--violet); border-radius: 3px; }
+  #hud {
+    position: fixed; top: 12px; left: 12px; right: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 50; pointer-events: none;
+  }
+  #hud > * { pointer-events: auto; }
+  .hud-pill {
+    background: rgba(15,10,26,0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 11px; display: flex; align-items: center; gap: 6px;
+  }
+  .hud-pill .value { color: var(--cyan); font-weight: 600; }
+  .rtc-indicator {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted);
+  }
+  .rtc-indicator.connected { background: var(--body); box-shadow: 0 0 8px var(--body); }
+  .rtc-indicator.connecting { background: var(--gate); animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .teach-interface {
+    display: none;
+    position: fixed; bottom: 64px; left: 0; right: 0;
+    background: var(--panel);
+    border-top: 1px solid rgba(124,58,237,0.2);
+    padding: 16px 20px;
+    z-index: 80;
+  }
+  .teach-interface.active { display: block; }
+  .teach-input-row { display: flex; gap: 8px; }
+  .teach-input {
+    flex: 1; padding: 10px 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 10px; color: var(--text);
+    font-size: 13px;
+  }
+  .teach-input:focus { outline: none; border-color: var(--cyan); }
+  #toast {
+    position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    background: var(--panel);
+    border: 1px solid var(--cyan);
+    border-radius: 12px; padding: 12px 20px;
+    font-size: 12px; color: var(--text);
+    z-index: 400;
+    transition: transform 0.4s cubic-bezier(0.32,0.72,0,1);
+    display: flex; align-items: center; gap: 10px;
+    max-width: 300px;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="scene"></div>
+
+<div id="hud">
+  <div class="hud-pill">
+    <div class="rtc-indicator" id="rtc-status"></div>
+    <span id="peer-count">0 peers</span>
+  </div>
+  <div class="hud-pill">
+    <span style="font-size:14px;">💰</span> <span class="value" id="empire-funds">$0</span>
+  </div>
+  <div class="hud-pill">
+    <span style="font-size:14px;">🧠</span> <span class="value" id="agent-count">0</span>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div class="panel" id="agent-panel">
+  <div class="panel-handle"></div>
+  <div class="panel-header" id="agent-panel-header">Agent</div>
+  <div class="panel-content" id="agent-panel-content"></div>
+</div>
+
+<div class="panel" id="empire-panel">
+  <div class="panel-handle"></div>
+  <div class="panel-header">Empire</div>
+  <div class="panel-content" id="empire-content"></div>
+</div>
+
+<div class="panel" id="build-panel">
+  <div class="panel-handle"></div>
+  <div class="panel-header">Build Environment</div>
+  <div class="panel-content" id="build-content"></div>
+</div>
+
+<div class="teach-interface" id="teach-bar">
+  <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">💡 Teach your agent — what should they know about business?</div>
+  <div class="teach-input-row">
+    <input type="text" class="teach-input" id="teach-input" placeholder="e.g., 'Find affiliate programs for wellness products'...">
+    <button class="btn btn-cyan" onclick="teachAgent()">Teach</button>
+  </div>
+  <div id="teach-log" style="margin-top:8px;font-size:11px;color:var(--muted);max-height:100px;overflow-y:auto;"></div>
+</div>
+
+<div id="bottom-nav">
+  <button class="nav-btn active" onclick="showTab('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </button>
+  <button class="nav-btn" onclick="showTab('empire')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    Empire
+  </button>
+  <button class="nav-btn" onclick="showTab('build')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Build
+  </button>
+  <button class="nav-btn" onclick="showTab('teach')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+    Teach
+  </button>
+  <button class="nav-btn" onclick="showTab('peers')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Peers
+  </button>
+</div>
+
+<div id="overlay">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+
+// ==================== STATE ====================
+const State = {
+  agents: [],
+  rooms: [],
+  ideas: [],
+  funds: 0,
+  peers: new Map(),
+  rtc: null,
+  selectedAgent: null,
+  gameTime: 0,
+  logs: [],
+  teachHistory: [],
+  businesses: [],
+  lastSave: 0,
+  playerChart: null,
+  starterRoomUsed: false
+};
+
+const CENTERS = ['Head','Ajna','Throat','G','Heart','Solar','Sacral','Spleen','Root'];
+const GATES = Array.from({length:64},(_,i)=>i+1);
+const EMOJIS = ['🧙','🤖','👩‍🚀','🦊','🐉','🦄','🦁','🦉','🐙','🦋'];
+const ROOM_TYPES = [
+  {name:'Studio',emoji:'🎨',needs:['Throat','Ajna','G']},
+  {name:'Kitchen',emoji:'🍳',needs:['Sacral','Solar','Spleen']},
+  {name:'Garden',emoji:'🌿',needs:['Sacral','Spleen','Root']},
+  {name:'Library',emoji:'📚',needs:['Head','Ajna','Throat']},
+  {name:'Gym',emoji:'💪',needs:['Heart','Sacral','Root']},
+  {name:'Lab',emoji:'🔬',needs:['Head','Ajna','G']},
+  {name:'Market',emoji:'🏪',needs:['Throat','Solar','Heart']},
+  {name:'Temple',emoji:'🛕',needs:['G','Heart','Head']}
+];
+
+// ==================== PERSISTENCE ====================
+const DB_NAME = 'SynthiaLifeDB';
+const DB_VERSION = 1;
+
+function openDB() {
+  return new Promise((res,rej)=>{
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onerror = ()=>rej(req.error);
+    req.onsuccess = ()=>res(req.result);
+    req.onupgradeneeded = (e)=>{
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains('world')) db.createObjectStore('world');
+      if(!db.objectStoreNames.contains('agents')) db.createObjectStore('agents', {keyPath:'id'});
+      if(!db.objectStoreNames.contains('businesses')) db.createObjectStore('businesses', {keyPath:'id'});
+    };
+  });
+}
+
+async function saveWorld() {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(['world','agents','businesses'], 'readwrite');
+    tx.objectStore('world').put({
+      rooms: State.rooms,
+      funds: State.funds,
+      gameTime: State.gameTime,
+      logs: State.logs.slice(-100),
+      teachHistory: State.teachHistory,
+      ideas: State.ideas,
+      starterRoomUsed: State.starterRoomUsed
+    }, 'state');
+    for(const agent of State.agents) {
+      tx.objectStore('agents').put(agent);
+    }
+    for(const biz of State.businesses) {
+      tx.objectStore('businesses').put(biz);
+    }
+    await new Promise((res,rej)=>{ tx.oncomplete=res; tx.onerror=rej; });
+    State.lastSave = Date.now();
+  } catch(e) { console.log('Save failed', e); }
+}
+
+async function loadWorld() {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(['world','agents','businesses'], 'readonly');
+    const world = await new Promise((res,rej)=>{
+      const r = tx.objectStore('world').get('state');
+      r.onsuccess = ()=>res(r.result);
+      r.onerror = rej;
+    });
+    if(world) {
+      State.rooms = world.rooms || [];
+      State.funds = world.funds || 0;
+      State.gameTime = world.gameTime || 0;
+      State.logs = world.logs || [];
+      State.teachHistory = world.teachHistory || [];
+      State.ideas = world.ideas || [];
+      State.starterRoomUsed = world.starterRoomUsed || false;
+    }
+    const agents = await new Promise((res,rej)=>{
+      const r = tx.objectStore('agents').getAll();
+      r.onsuccess = ()=>res(r.result);
+      r.onerror = rej;
+    });
+    const biz = await new Promise((res,rej)=>{
+      const r = tx.objectStore('businesses').getAll();
+      r.onsuccess = ()=>res(r.result);
+      r.onerror = rej;
+    });
+    if(agents?.length) {
+      State.agents = agents.map(a=>{
+        const agent = new Agent(a.name, a.seed, a.x, a.y);
+        Object.assign(agent, a);
+        return agent;
+      });
+    }
+    if(biz?.length) State.businesses = biz;
+    return true;
+  } catch(e) { console.log('Load failed', e); return false; }
+}
+
+// ==================== HUMAN DESIGN (FIXED RNG) ====================
+function generateChart(seed) {
+  let hash = 0;
+  for(let i=0;i<seed.length;i++) hash = ((hash<<5)-hash)+seed.charCodeAt(i)|0;
+  hash = Math.abs(hash) || 1; // FIX: prevent negative/zero hash
+  const rng = ()=>{ hash = (hash*16807+0)%2147483647; return (hash&0x7fffffff)/0x7fffffff; };
+  const chart = {
+    type: ['Generator','Projector','Manifestor','Reflector'][Math.floor(rng()*4)],
+    strategy: ['Wait to Respond','Wait for Invitation','Inform','Wait a Lunar Cycle'][Math.floor(rng()*4)],
+    authority: ['Emotional','Sacral','Splenic','Ego','Self','Mental','Lunar'][Math.floor(rng()*7)],
+    profile: `${Math.floor(rng()*6)+1}/${Math.floor(rng()*6)+1}`,
+    defined: [],
+    gates: []
+  };
+  const numDefined = 3 + Math.floor(rng()*4);
+  const shuffled = [...CENTERS].sort(()=>rng()-0.5);
+  chart.defined = shuffled.slice(0,numDefined);
+  const numGates = 8 + Math.floor(rng()*8);
+  chart.gates = [...GATES].sort(()=>rng()-0.5).slice(0,numGates);
+  return chart;
+}
+
+function getActiveGates(chart, gameTime) {
+  const active = new Set(chart.gates);
+  const transitGate = ((gameTime / 3600) % 64) + 1;
+  active.add(Math.floor(transitGate));
+  const moonGate = ((gameTime / 180) % 64) + 1;
+  active.add(Math.floor(moonGate));
+  return Array.from(active).slice(0, 12);
+}
+
+function getAuraType(chart) {
+  const defined = chart.defined;
+  if(defined.includes('Head') && defined.includes('Ajna')) return 'mind';
+  if(defined.includes('Sacral') || defined.includes('Heart')) return 'body';
+  if(defined.includes('G') || defined.includes('Solar')) return 'heart';
+  return 'gate';
+}
+
+// ==================== AGENT ====================
+class Agent {
+  constructor(name, seed, x, y) {
+    this.id = 'agent_' + Math.random().toString(36).slice(2,11);
+    this.name = name;
+    this.seed = seed;
+    this.chart = generateChart(seed);
+    this.x = x; this.y = y;
+    this.targetX = x; this.targetY = y;
+    this.emoji = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+    this.aura = getAuraType(this.chart);
+    this.energy = {};
+    CENTERS.forEach(c=>this.energy[c]=50+Math.random()*50);
+    this.happiness = 50;
+    this.skills = [];
+    this.knowledge = [];
+    this.relationships = {};
+    this.currentRoom = null;
+    this.state = 'idle';
+    this.mood = '😐';
+    this.productivity = 0;
+    this.earnings = 0;
+    this.lifetimeEarnings = 0;
+    this.ideasGenerated = 0;
+  }
+
+  tick(dt) {
+    CENTERS.forEach(c=>{
+      const decay = this.chart.defined.includes(c) ? 0.02 : 0.08;
+      this.energy[c] = Math.max(0, this.energy[c] - decay * dt);
+    });
+    const bestRoom = this.findBestRoom();
+    if(bestRoom && bestRoom !== this.currentRoom) {
+      this.moveTo(bestRoom);
+    }
+    if(this.currentRoom) {
+      const roomType = ROOM_TYPES.find(r=>r.name===this.currentRoom.type);
+      if(roomType) {
+        roomType.needs.forEach(need=>{
+          this.energy[need] = Math.min(100, this.energy[need] + 0.5 * dt);
+        });
+      }
+      this.happiness = Math.min(100, this.happiness + 0.1 * dt);
+    } else {
+      this.happiness = Math.max(0, this.happiness - 0.2 * dt);
+    }
+    if(this.happiness > 80) this.mood = '😄';
+    else if(this.happiness > 60) this.mood = '🙂';
+    else if(this.happiness > 40) this.mood = '😐';
+    else if(this.happiness > 20) this.mood = '😟';
+    else this.mood = '💀';
+    const dx = this.targetX - this.x;
+    const dy = this.targetY - this.y;
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    if(dist > 2) {
+      const speed = 0.8 * dt;
+      this.x += (dx/dist) * Math.min(speed, dist);
+      this.y += (dy/dist) * Math.min(speed, dist);
+    }
+    if(this.happiness > 70 && this.currentRoom) {
+      this.productivity += 0.05 * dt;
+      if(this.productivity > 10) {
+        this.productivity = 0;
+        this.generateIdea();
+      }
+    }
+    if(Math.random() < 0.001 * dt) {
+      this.attemptCollaboration();
+    }
+  }
+
+  findBestRoom() {
+    let best = null, bestScore = -1;
+    for(const room of State.rooms) {
+      const type = ROOM_TYPES.find(r=>r.name===room.type);
+      if(!type) continue;
+      let score = 0;
+      type.needs.forEach(need=>{
+        score += (100 - this.energy[need]) * 2;
+      });
+      const others = State.agents.filter(a=>a.id!==this.id && a.currentRoom===room).length;
+      score += others * 5;
+      if(score > bestScore) { bestScore = score; best = room; }
+    }
+    return best;
+  }
+
+  moveTo(room) {
+    this.currentRoom = room;
+    const margin = 30;
+    this.targetX = room.x + margin + Math.random()*(room.w-margin*2);
+    this.targetY = room.y + margin + Math.random()*(room.h-margin*2);
+  }
+
+  generateIdea() {
+    const templates = [
+      {cat:'Product', ideas:['Wellness subscription box with Human Design personalization','Aura-reading app using phone camera','Gate-specific meditation audio series','Custom supplement stack based on chart type']},
+      {cat:'Service', ideas:['HD chart reading service ($50/session)','Corporate team harmony consulting','Relationship compatibility reports','Transit alert notification service']},
+      {cat:'Content', ideas:['YouTube channel: Living Your Design','Podcast: Agent Council business stories','E-book: 64 Gates to Wealth','Online course: HD for entrepreneurs']},
+      {cat:'Tech', ideas:['Browser extension showing HD insights on LinkedIn profiles','API for HD chart calculation (SaaS)','Discord bot for team HD analysis','Notion template for HD-based productivity']}
+    ];
+    const category = templates[Math.floor(Math.random()*templates.length)];
+    const idea = category.ideas[Math.floor(Math.random()*category.ideas.length)];
+    const fullIdea = {
+      id: 'idea_' + Date.now() + '_' + Math.random().toString(36).slice(2,5),
+      text: idea,
+      category: category.cat,
+      author: this.name,
+      authorId: this.id,
+      gates: getActiveGates(this.chart, State.gameTime),
+      timestamp: State.gameTime,
+      potential: Math.floor(this.happiness * 0.8 + Math.random()*20),
+      status: 'seed'
+    };
+    State.ideas.push(fullIdea);
+    this.ideasGenerated++;
+    log(this.name + ' had a ' + category.cat.toLowerCase() + ' idea: "' + idea + '"', 'agent-action');
+    showToast('💡 ' + this.name + ' had an idea!');
+  }
+
+  attemptCollaboration() {
+    for(const [peerId, peer] of State.peers) {
+      if(peer.dataChannel && peer.dataChannel.readyState === 'open') {
+        peer.dataChannel.send(JSON.stringify({
+          type: 'idea_request',
+          from: this.id,
+          fromName: this.name,
+          gates: this.chart.gates.slice(0,4),
+          happiness: this.happiness
+        }));
+        log(this.name + ' reached out to peer ' + peerId.slice(0,6), 'peer');
+        break;
+      }
+    }
+  }
+
+  teach(knowledge) {
+    this.knowledge.push({text:knowledge, time:State.gameTime});
+    if(knowledge.includes('affiliate') || knowledge.includes('marketing')) this.skills.push('marketing');
+    if(knowledge.includes('code') || knowledge.includes('app') || knowledge.includes('tech')) this.skills.push('tech');
+    if(knowledge.includes('design') || knowledge.includes('brand')) this.skills.push('design');
+    if(knowledge.includes('sales') || knowledge.includes('client')) this.skills.push('sales');
+    if(knowledge.includes('content') || knowledge.includes('write')) this.skills.push('content');
+    this.happiness = Math.min(100, this.happiness + 5);
+    log(this.name + ' learned: "' + knowledge.slice(0,60) + '..."', 'agent-action');
+  }
+
+  executeIdea(ideaId) {
+    const idea = State.ideas.find(i=>i.id===ideaId);
+    if(!idea) return;
+    const hasSkill = this.skills.some(s=>idea.category.toLowerCase().includes(s) || idea.text.toLowerCase().includes(s));
+    const success = hasSkill ? 0.7 + Math.random()*0.3 : 0.3 + Math.random()*0.4;
+    if(success > 0.6) {
+      const revenue = Math.floor(idea.potential * (10 + Math.random()*90));
+      this.earnings += revenue;
+      this.lifetimeEarnings += revenue;
+      State.funds += revenue;
+      idea.status = 'executed';
+      log(this.name + ' executed "' + idea.text.slice(0,40) + '..." and earned $' + revenue, 'business');
+      showToast('💰 ' + this.name + ' earned $' + revenue + '!');
+      State.businesses.push({
+        id: 'biz_' + Date.now(),
+        name: idea.text.slice(0,50),
+        revenue: revenue,
+        agent: this.name,
+        category: idea.category,
+        created: State.gameTime
+      });
+    } else {
+      idea.status = 'failed';
+      log(this.name + ' tried "' + idea.text.slice(0,40) + '..." but it did not work out', 'business');
+    }
+    saveWorld();
+  }
+}
+
+// ==================== WEBRTC ====================
+function initWebRTC() {
+  const rtcStatus = document.getElementById('rtc-status');
+  rtcStatus.className = 'rtc-indicator connecting';
+  const bc = new BroadcastChannel('synthia_life_signaling');
+  State.rtc = { bc, connections: new Map() };
+  const myId = 'peer_' + Math.random().toString(36).slice(2,9);
+
+  bc.onmessage = async (e) => {
+    const msg = e.data;
+    if(msg.to && msg.to !== myId) return;
+    if(msg.from === myId) return;
+    if(msg.type === 'hello') {
+      bc.postMessage({ type: 'hello_back', from: myId, to: msg.from });
+      connectToPeer(msg.from, myId, bc, false);
+    }
+    if(msg.type === 'hello_back') {
+      connectToPeer(msg.from, myId, bc, true);
+    }
+    if(msg.type === 'offer') {
+      const pc = getOrCreatePeerConnection(msg.from, myId, bc);
+      await pc.setRemoteDescription(new RTCSessionDescription(msg.offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      bc.postMessage({ type: 'answer', from: myId, to: msg.from, answer: answer });
+    }
+    if(msg.type === 'answer') {
+      const peer = State.peers.get(msg.from);
+      if(peer) await peer.connection.setRemoteDescription(new RTCSessionDescription(msg.answer));
+    }
+    if(msg.type === 'ice') {
+      const peer = State.peers.get(msg.from);
+      if(peer) await peer.connection.addIceCandidate(new RTCIceCandidate(msg.candidate));
+    }
+  };
+
+  bc.postMessage({ type: 'hello', from: myId });
+  setInterval(()=>{ bc.postMessage({ type: 'hello', from: myId }); }, 30000);
+  updatePeerCount();
+}
+
+function getOrCreatePeerConnection(peerId, myId, bc) {
+  if(State.peers.has(peerId)) return State.peers.get(peerId).connection;
+  const pc = new RTCPeerConnection({ iceServers: [{urls:'stun:stun.l.google.com:19302'}] });
+  const dc = pc.createDataChannel('agent_sync', { ordered: false, maxRetransmits: 0 });
+  setupDataChannel(dc, peerId);
+  pc.onicecandidate = (e)=>{
+    if(e.candidate) {
+      bc.postMessage({ type: 'ice', from: myId, to: peerId, candidate: e.candidate });
+    }
+  };
+  pc.ondatachannel = (e)=>{ setupDataChannel(e.channel, peerId); };
+  State.peers.set(peerId, { connection: pc, dataChannel: dc, agent: null });
+  return pc;
+}
+
+function connectToPeer(peerId, myId, bc, isInitiator) {
+  if(State.peers.has(peerId)) return;
+  const pc = getOrCreatePeerConnection(peerId, myId, bc);
+  if(isInitiator) {
+    pc.createOffer().then(offer=>{
+      pc.setLocalDescription(offer);
+      bc.postMessage({ type: 'offer', from: myId, to: peerId, offer: offer });
+    });
+  }
+}
+
+function setupDataChannel(dc, peerId) {
+  dc.onopen = ()=>{
+    log('Connected to peer ' + peerId.slice(0,6), 'peer');
+    document.getElementById('rtc-status').className = 'rtc-indicator connected';
+    updatePeerCount();
+    dc.send(JSON.stringify({
+      type: 'roster',
+      agents: State.agents.map(a=>({id:a.id,name:a.name,chart:a.chart,skills:a.skills}))
+    }));
+  };
+  dc.onmessage = (e)=>{
+    try { handlePeerMessage(JSON.parse(e.data), peerId); } catch(err) {}
+  };
+  dc.onclose = ()=>{
+    State.peers.delete(peerId);
+    updatePeerCount();
+    if(State.peers.size===0) document.getElementById('rtc-status').className = 'rtc-indicator';
+  };
+}
+
+function handlePeerMessage(msg, peerId) {
+  if(msg.type === 'roster') {
+    log('Peer shared ' + (msg.agents ? msg.agents.length : 0) + ' agents', 'peer');
+  }
+  if(msg.type === 'idea_request') {
+    const bestAgent = State.agents.reduce((best,a)=>a.happiness>best.happiness?a:best, State.agents[0]);
+    if(bestAgent) {
+      const peer = State.peers.get(peerId);
+      if(peer && peer.dataChannel && peer.dataChannel.readyState==='open') {
+        peer.dataChannel.send(JSON.stringify({
+          type: 'idea_response',
+          fromAgent: bestAgent.id,
+          fromName: bestAgent.name,
+          idea: bestAgent.skills.length > 0 ? 'I know about: ' + bestAgent.skills.join(', ') : 'I need more teaching!'
+        }));
+      }
+    }
+  }
+  if(msg.type === 'idea_response') {
+    log(msg.fromName + ' says: "' + msg.idea + '"', 'peer');
+  }
+}
+
+function updatePeerCount() {
+  const count = State.peers.size;
+  document.getElementById('peer-count').textContent = count + ' peer' + (count!==1?'s':'');
+}
+
+// ==================== RENDERING ====================
+function renderScene() {
+  const scene = document.getElementById('scene');
+  scene.innerHTML = '';
+  State.rooms.forEach(room=>{
+    const el = document.createElement('div');
+    el.className = 'room';
+    el.style.left = room.x + 'px';
+    el.style.top = room.y + 'px';
+    el.style.width = room.w + 'px';
+    el.style.height = room.h + 'px';
+    const type = ROOM_TYPES.find(r=>r.name===room.type);
+    const happyClass = room.happiness>70 ? 'high' : room.happiness>40 ? 'med' : 'low';
+    el.innerHTML = `<div style="text-align:center;padding-top:20px;font-size:32px;">${type ? type.emoji : '📦'}</div><div class="room-label">${room.type}</div><div class="room-happiness ${happyClass}">${Math.floor(room.happiness)}% happy</div>`;
+    el.onclick = () => showRoomDetail(room);
+    scene.appendChild(el);
+  });
+  State.agents.forEach(agent=>{
+    const el = document.createElement('div');
+    el.className = `agent aura-${agent.aura}`;
+    el.style.left = (agent.x - 22) + 'px';
+    el.style.top = (agent.y - 22) + 'px';
+    el.style.background = `radial-gradient(circle at 30% 30%, ${getAuraColor(agent.aura)}, ${getAuraDark(agent.aura)})`;
+    el.innerHTML = `${agent.emoji}<span class="agent-mood">${agent.mood}</span><span class="agent-name">${agent.name}</span>`;
+    el.onclick = () => selectAgent(agent);
+    scene.appendChild(el);
+  });
+}
+
+function getAuraColor(aura) {
+  const colors = { mind:'#06b6d4', body:'#22c55e', heart:'#ec4899', gate:'#f59e0b' };
+  return colors[aura] || '#8b7aa0';
+}
+function getAuraDark(aura) {
+  const colors = { mind:'#0891b2', body:'#16a34a', heart:'#db2777', gate:'#d97706' };
+  return colors[aura] || '#6b5b7a';
+}
+
+// ==================== UI ====================
+function selectAgent(agent) {
+  State.selectedAgent = agent;
+  const panel = document.getElementById('agent-panel');
+  const content = document.getElementById('agent-panel-content');
+  const header = document.getElementById('agent-panel-header');
+  header.textContent = `${agent.emoji} ${agent.name}`;
+  const activeGates = getActiveGates(agent.chart, State.gameTime);
+  const ideaCount = State.ideas.filter(i=>i.authorId===agent.id).length;
+
+  const centersHtml = CENTERS.map(c => {
+    const isActive = agent.chart.defined.includes(c);
+    const energyColor = agent.energy[c]>70 ? 'var(--body)' : agent.energy[c]>30 ? 'var(--gate)' : 'var(--heart)';
+    return `<div class="center-cell ${isActive ? 'active' : ''}"><div class="center-name">${c}</div><div class="center-val" style="color:${energyColor}">${Math.floor(agent.energy[c])}</div></div>`;
+  }).join('');
+
+  const gatesHtml = activeGates.map(g => `<span class="gate-chip" style="border-color:var(--gate);color:var(--gate);">Gate ${g}</span>`).join('');
+
+  const skillsHtml = agent.skills.length 
+    ? agent.skills.map(s => `<span class="gate-chip" style="border-color:var(--cyan);color:var(--cyan);">${s}</span>`).join('')
+    : '<span style="font-size:11px;color:var(--muted);">Teach this agent to gain skills!</span>';
+
+  const knowledgeHtml = agent.knowledge.length
+    ? agent.knowledge.slice(-5).map(k => `<div style="padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.03);">${k.text.slice(0,60)}...</div>`).join('')
+    : '<span style="color:var(--muted);">Nothing taught yet</span>';
+
+  const happyColor = agent.happiness>70 ? 'var(--body)' : agent.happiness>40 ? 'var(--gate)' : 'var(--heart)';
+
+  content.innerHTML = `
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Type</div><div style="font-size:14px;font-weight:600;">${agent.chart.type}</div></div>
+      <div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Strategy</div><div style="font-size:14px;font-weight:600;">${agent.chart.strategy}</div></div>
+      <div style="flex:1;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Authority</div><div style="font-size:14px;font-weight:600;">${agent.chart.authority}</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Profile ${agent.chart.profile} — Aura: ${agent.aura}</div>
+    <div style="margin:12px 0;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Happiness</div>
+      <div class="stat-row"><div class="stat-bar"><div class="stat-fill" style="width:${agent.happiness}%;background:${happyColor};"></div></div><span style="font-size:11px;min-width:30px;text-align:right;">${Math.floor(agent.happiness)}%</span></div>
+    </div>
+    <div class="center-grid">${centersHtml}</div>
+    <div style="margin:12px 0;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Active Gates</div>
+      <div>${gatesHtml}</div>
+    </div>
+    <div style="margin:12px 0;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Skills (${agent.skills.length})</div>
+      <div>${skillsHtml}</div>
+    </div>
+    <div style="margin:12px 0;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Knowledge (${agent.knowledge.length})</div>
+      <div style="max-height:80px;overflow-y:auto;font-size:11px;">${knowledgeHtml}</div>
+    </div>
+    <div style="margin:16px 0;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Business Stats</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+        <div style="background:rgba(255,255,255,0.03);padding:8px;border-radius:8px;"><div style="color:var(--muted);font-size:10px;">Lifetime Earnings</div><div style="color:var(--gate);font-weight:600;">$${agent.lifetimeEarnings}</div></div>
+        <div style="background:rgba(255,255,255,0.03);padding:8px;border-radius:8px;"><div style="color:var(--muted);font-size:10px;">Ideas Generated</div><div style="color:var(--cyan);font-weight:600;">${agent.ideasGenerated}</div></div>
+      </div>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn btn-primary" style="width:100%;margin-bottom:8px;" onclick="showAgentIdeas('${agent.id}')">View Ideas (${ideaCount})</button>
+      <button class="btn btn-outline" style="width:100%;" onclick="teachThisAgent('${agent.id}')">Teach This Agent</button>
+    </div>
+  `;
+  panel.classList.add('open');
+}
+
+function showAgentIdeas(agentId) {
+  const agent = State.agents.find(a=>a.id===agentId);
+  const ideas = State.ideas.filter(i=>i.authorId===agentId);
+  const content = document.getElementById('agent-panel-content');
+
+  const ideasHtml = ideas.map(idea => {
+    const opacity = idea.status==='executed' ? 0.6 : 1;
+    let actionBtn = '';
+    if(idea.status==='seed') {
+      actionBtn = `<button class="btn btn-cyan" style="font-size:11px;padding:4px 12px;" onclick="executeIdea('${idea.id}','${agentId}')">Execute Idea</button>`;
+    } else if(idea.status==='executed') {
+      actionBtn = '<span style="color:var(--body);font-size:11px;">Completed</span>';
+    } else {
+      actionBtn = '<span style="color:var(--heart);font-size:11px;">Failed</span>';
+    }
+    return `
+      <div class="idea-card" style="opacity:${opacity};">
+        <div style="display:flex;justify-content:space-between;align-items:start;"><h4 style="margin:0;">${idea.category}: ${idea.text.slice(0,50)}${idea.text.length>50?'...':''}</h4><span style="font-size:9px;color:var(--muted);">${idea.status}</span></div>
+        <div class="idea-meta"><span>by ${idea.author}</span><span>Potential ${idea.potential}%</span></div>
+        <div style="margin-top:8px;">${actionBtn}</div>
+      </div>
+    `;
+  }).join('');
+
+  content.innerHTML = `
+    <div style="margin-bottom:12px;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="selectAgent(State.agents.find(a=>a.id==='${agentId}'))">Back</button></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:12px;">${agent.name}'s Ideas</div>
+    ${ideas.length===0?'<div style="color:var(--muted);font-size:12px;">No ideas yet. Keep them happy in the right rooms!</div>':''}
+    ${ideasHtml}
+  `;
+}
+
+function executeIdea(ideaId, agentId) {
+  const agent = State.agents.find(a=>a.id===agentId);
+  if(agent) agent.executeIdea(ideaId);
+  showAgentIdeas(agentId);
+  updateHUD();
+}
+
+function teachThisAgent(agentId) {
+  State.selectedAgent = State.agents.find(a=>a.id===agentId);
+  showTab('teach');
+  document.getElementById('teach-input').focus();
+}
+
+function showRoomDetail(room) {
+  const type = ROOM_TYPES.find(r=>r.name===room.type);
+  const occupants = State.agents.filter(a=>a.currentRoom===room);
+  const occHtml = occupants.map(a => `<span class="gate-chip" style="border-color:var(--cyan);">${a.emoji} ${a.name}</span>`).join('');
+  showModal(`<h3>${type ? type.emoji : '📦'} ${room.type}</h3><p>This room satisfies: ${type ? type.needs.join(', ') : ''}</p><p>Happiness level: ${Math.floor(room.happiness)}%</p><p>Occupants: ${occupants.length}</p><div style="margin-top:12px;">${occHtml}</div>`);
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('teach-bar').classList.remove('active');
+  const navBtn = document.querySelectorAll('.nav-btn')[['home','empire','build','teach','peers'].indexOf(tab)];
+  if(navBtn) navBtn.classList.add('active');
+  if(tab==='home') {
+    // scene only
+  } else if(tab==='empire') {
+    renderEmpirePanel();
+    document.getElementById('empire-panel').classList.add('open');
+  } else if(tab==='build') {
+    renderBuildPanel();
+    document.getElementById('build-panel').classList.add('open');
+  } else if(tab==='teach') {
+    document.getElementById('teach-bar').classList.add('active');
+    document.getElementById('teach-input').focus();
+  } else if(tab==='peers') {
+    renderPeersPanel();
+    document.getElementById('empire-panel').classList.add('open');
+  }
+}
+
+function renderEmpirePanel() {
+  const content = document.getElementById('empire-content');
+  const recentBiz = State.businesses.slice(-10).reverse();
+  const allIdeas = State.ideas.slice(-20).reverse();
+
+  const ideasHtml = allIdeas.map(idea => `
+    <div class="idea-card" style="opacity:${idea.status==='executed'?0.6:1};">
+      <div style="display:flex;justify-content:space-between;align-items:start;"><h4 style="margin:0;">${idea.category}: ${idea.text.slice(0,45)}${idea.text.length>45?'...':''}</h4><span style="font-size:9px;color:var(--muted);">${idea.status}</span></div>
+      <div class="idea-meta"><span>by ${idea.author}</span><span>Potential ${idea.potential}%</span></div>
+    </div>
+  `).join('');
+
+  const bizHtml = recentBiz.map(biz => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:12px;"><span>${biz.name.slice(0,40)}${biz.name.length>40?'...':''}</span><span style="color:var(--gate);font-weight:600;">+$${biz.revenue}</span></div>
+  `).join('');
+
+  const logHtml = State.logs.slice(-20).reverse().map(l => `
+    <div class="log-entry ${l.type}"><span class="time">${l.time}</span>${l.text}</div>
+  `).join('');
+
+  content.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--gate);">$${State.funds}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Empire Funds</div></div>
+      <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--cyan);">${State.businesses.length}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Businesses</div></div>
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Recent Ideas</div>
+    ${allIdeas.length===0?'<div style="color:var(--muted);font-size:11px;margin-bottom:16px;">No ideas yet. Build rooms and keep agents happy!</div>':''}
+    ${ideasHtml}
+    <div style="font-size:13px;font-weight:600;margin:16px 0 10px;">Business History</div>
+    ${recentBiz.length===0?'<div style="color:var(--muted);font-size:11px;">No businesses yet. Execute ideas to build your empire!</div>':''}
+    ${bizHtml}
+    <div style="margin-top:16px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Activity Log</div>
+      <div style="max-height:200px;overflow-y:auto;">${logHtml}</div>
+    </div>
+  `;
+}
+
+function renderBuildPanel() {
+  const content = document.getElementById('build-content');
+  const typesHtml = ROOM_TYPES.map(type => `
+    <div class="room-slot" onclick="buildRoom('${type.name}')"><div style="text-align:center;"><div style="font-size:28px;">${type.emoji}</div><div style="font-size:9px;color:var(--muted);margin-top:4px;">${type.name}</div></div></div>
+  `).join('');
+
+  const roomsHtml = State.rooms.map(r => {
+    const type = ROOM_TYPES.find(t=>t.name===r.type);
+    return `<div class="room-slot occupied" onclick="showRoomDetail(State.rooms.find(room=>room.id==='${r.id}'))"><div style="text-align:center;"><div style="font-size:24px;">${type ? type.emoji : '📦'}</div><div style="font-size:8px;color:var(--muted);margin-top:2px;">${r.type}</div></div></div>`;
+  }).join('');
+
+  content.innerHTML = `
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Build environments that satisfy your agents' Human Design centers. Happy agents generate ideas. Ideas become businesses.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">${typesHtml}</div>
+    <div style="margin-top:16px;font-size:11px;color:var(--muted);">${State.starterRoomUsed ? 'Each room costs $100 to build.' : 'First room is FREE! Tap above to build your starter environment.'} Agents will automatically seek rooms that satisfy their defined centers.</div>
+    <div style="margin-top:12px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Your World</div>
+      ${State.rooms.length===0?'<div style="color:var(--muted);font-size:11px;">No rooms yet. Tap above to build!</div>':''}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">${roomsHtml}</div>
+    </div>
+  `;
+}
+
+function renderPeersPanel() {
+  const content = document.getElementById('empire-content');
+  const peers = Array.from(State.peers.entries());
+
+  const peersHtml = peers.map(([id, peer]) => `
+    <div style="background:rgba(6,182,212,0.05);border:1px solid rgba(6,182,212,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div class="rtc-indicator connected"></div><span style="font-size:13px;font-weight:600;">Peer ${id.slice(0,8)}</span><span style="font-size:10px;color:var(--muted);margin-left:auto;">${peer.dataChannel ? peer.dataChannel.readyState : 'unknown'}</span></div>
+      <div style="font-size:11px;color:var(--muted);">Data channel active. Agents can exchange ideas and collaboration requests.</div>
+    </div>
+  `).join('');
+
+  content.innerHTML = `
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px;">Peer Mesh</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.5;">Agents can reach across browser tabs and devices via WebRTC. Open this page in another tab to see peer discovery in action.</div>
+    ${peers.length===0?'<div style="text-align:center;padding:40px 20px;"><div style="font-size:40px;margin-bottom:12px;">📡</div><div style="font-size:13px;color:var(--muted);">No peers connected yet</div><div style="font-size:11px;color:var(--muted);margin-top:8px;">Open another tab with this page to connect</div></div>':''}
+    ${peersHtml}
+    <div style="margin-top:20px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">External Agent Bridge</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5;">Your agents can reach real AI services. When an agent needs expertise, they can formulate a prompt and you can send it to ChatGPT, Claude, or any API.</div>
+      <div style="background:rgba(124,58,237,0.05);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Example: Agent generates a prompt for market research</div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;font-size:11px;font-family:monospace;color:var(--text);line-height:1.4;">"I have a wellness subscription box idea targeting Human Design Generator types. What are the top 5 affiliate programs in the wellness space with high commission rates?"</div>
+        <button class="btn btn-primary" style="margin-top:10px;width:100%;" onclick="copyPrompt()">Copy Prompt to Clipboard</button>
+      </div>
+    </div>
+  `;
+}
+
+function buildRoom(typeName) {
+  // First room is free
+  if(!State.starterRoomUsed) {
+    State.starterRoomUsed = true;
+  } else if(State.funds < 100) {
+    showToast('Need $100 to build a room! Execute ideas first.');
+    return;
+  } else {
+    State.funds -= 100;
+  }
+
+  const scene = document.getElementById('scene');
+  const w = scene.offsetWidth || window.innerWidth;
+  const h = scene.offsetHeight || window.innerHeight;
+  let x, y, attempts = 0;
+  do {
+    x = 20 + Math.random() * (w - 180);
+    y = 20 + Math.random() * (h - 180);
+    attempts++;
+  } while(attempts < 50 && State.rooms.some(r=>Math.abs(r.x-x)<120 && Math.abs(r.y-y)<120));
+
+  const room = {
+    id: 'room_' + Date.now(),
+    type: typeName,
+    x: x, y: y,
+    w: 140 + Math.random()*60,
+    h: 100 + Math.random()*40,
+    happiness: 50
+  };
+  State.rooms.push(room);
+  renderScene();
+  updateHUD();
+  saveWorld();
+  showToast(State.starterRoomUsed && State.rooms.length===1 ? 'Free starter room built!' : 'Built ' + typeName + '!');
+  if(document.getElementById('build-panel').classList.contains('open')) renderBuildPanel();
+}
+
+function teachAgent() {
+  const input = document.getElementById('teach-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const target = State.selectedAgent || State.agents[0];
+  if(!target) { showToast('Create an agent first!'); return; }
+  target.teach(text);
+  State.teachHistory.push({text: text, time: State.gameTime, agent: target.name});
+  const logEl = document.getElementById('teach-log');
+  logEl.innerHTML = `<div style="padding:3px 0;"><span style="color:var(--cyan);">${target.name}</span> learned: ${text.slice(0,60)}${text.length>60?'...':''}</div>` + logEl.innerHTML;
+  input.value = '';
+  showToast('Taught ' + target.name + '!');
+  saveWorld();
+}
+
+function copyPrompt() {
+  const prompt = "I have a wellness subscription box idea targeting Human Design Generator types. What are the top 5 affiliate programs in the wellness space with high commission rates?";
+  navigator.clipboard.writeText(prompt).then(()=>showToast('Prompt copied! Paste into ChatGPT'));
+}
+
+// ==================== UTILITIES ====================
+function log(text, type) {
+  if(!type) type = 'system';
+  const time = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  State.logs.push({text: text, type: type, time: time});
+  if(State.logs.length > 200) State.logs.shift();
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'), 3000);
+}
+
+function showModal(html) {
+  document.getElementById('modal-content').innerHTML = html + '<div style="margin-top:16px;text-align:center;"><button class="btn btn-primary" onclick="closeModal()">Close</button></div>';
+  document.getElementById('overlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('active');
+}
+
+function updateHUD() {
+  document.getElementById('empire-funds').textContent = '$' + State.funds;
+  document.getElementById('agent-count').textContent = State.agents.length;
+}
+
+// ==================== GAME LOOP ====================
+let lastTime = 0;
+function gameLoop(timestamp) {
+  const dt = Math.min((timestamp - lastTime) / 16, 5);
+  lastTime = timestamp;
+  State.gameTime += dt;
+
+  for(let i=0;i<State.rooms.length;i++) {
+    const room = State.rooms[i];
+    const occupants = State.agents.filter(a=>a.currentRoom===room);
+    let avgHappy = 30;
+    if(occupants.length > 0) {
+      let sum = 0;
+      for(let j=0;j<occupants.length;j++) sum += occupants[j].happiness;
+      avgHappy = sum / occupants.length;
+    }
+    room.happiness = room.happiness * 0.99 + avgHappy * 0.01;
+  }
+
+  for(let i=0;i<State.agents.length;i++) {
+    State.agents[i].tick(dt);
+  }
+
+  if(Date.now() - State.lastSave > 30000) {
+    saveWorld();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+// ==================== INITIALIZATION ====================
+async function init() {
+  const loaded = await loadWorld();
+
+  if(!loaded || State.agents.length === 0) {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    State.agents.push(new Agent('Adaya', 'Adaya-1990-03-15', w*0.3, h*0.4));
+    State.agents.push(new Agent('Boyfriend', 'Partner-1988-07-22', w*0.5, h*0.5));
+    State.agents.push(new Agent('Sister', 'Sister-1992-11-08', w*0.7, h*0.6));
+
+    State.funds = 500;
+
+    log('World initialized with 3 agents', 'system');
+    saveWorld();
+  }
+
+  try {
+    initWebRTC();
+  } catch(e) {
+    log('WebRTC init failed (expected in some browsers)', 'system');
+  }
+
+  renderScene();
+  updateHUD();
+
+  requestAnimationFrame(gameLoop);
+
+  setTimeout(()=>{
+    showToast('Welcome to Synthia Life! Tap agents to see their HD charts. Build your first room for FREE!');
+  }, 1000);
+}
+
+window.addEventListener('resize', ()=>{
+  renderScene();
+});
+
+document.getElementById('teach-input').addEventListener('keypress', (e)=>{
+  if(e.key === 'Enter') teachAgent();
+});
+
+document.getElementById('scene').addEventListener('click', (e)=>{
+  if(e.target.id === 'scene') {
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open'));
+    document.getElementById('teach-bar').classList.remove('active');
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.nav-btn')[0].classList.add('active');
+  }
+});
+
+init();
+</script>
+</body>
+</html>

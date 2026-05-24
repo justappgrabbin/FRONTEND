@@ -1,0 +1,20 @@
+{
+  "project": "Morph Substrate",
+  "version": "1.0.0",
+  "expo_sdk": "54.x",
+  "react_native": "0.79.x",
+  "main_entry": "App.tsx",
+  "files": [
+    "App.tsx",
+    "index.tsx",
+    "package.json",
+    "app.json",
+    "tsconfig.json",
+    "eas.json",
+    "README.md"
+  ],
+  "setup": "npx create-expo-app morph-substrate --template blank-typescript && cd morph-substrate && [unzip and copy ALL files into folder, replacing existing] && npm install",
+  "start": "npx expo start",
+  "build_apk": "eas build --platform android --profile preview",
+  "build_ipa": "eas build --platform ios"
+}

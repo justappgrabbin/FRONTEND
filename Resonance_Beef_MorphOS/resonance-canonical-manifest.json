@@ -1,0 +1,1423 @@
+{
+  "created": "2026-05-24",
+  "purpose": "Canonical beef build: preserve and register every uploaded artifact; do not minimize away unique components.",
+  "counts": {
+    "files": 182,
+    "html_bodies": 21,
+    "code_artifacts": 135,
+    "archives": 6,
+    "major_components": 12,
+    "kimi_detected_apps": 7
+  },
+  "major_components": [
+    {
+      "id": "body.construct-grapes",
+      "name": "Construct / GrapesJS / WebStudio Body",
+      "path": "source/resonance-os-construct-grapesjs-webstudio.html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Main body with GrapesJS/WebStudio construct layer, habitat runtime, panels, registry concepts."
+    },
+    {
+      "id": "body.joe-unified",
+      "name": "Joe Unified Morph Substrate",
+      "path": "source/joe-resonance-unified-substrate.html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Unified merge manifest, Morph Engine, Agent Registry, Synthia/Morph artifacts preserved."
+    },
+    {
+      "id": "body.resonance-unified",
+      "name": "Resonance Unified Fixed",
+      "path": "source/resonance-os-unified-fixed.html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Offline-first combined build with sandbox bridge, intent graph, backend-enhanced terminal."
+    },
+    {
+      "id": "body.kimi-linux",
+      "name": "Kimi Fake Linux Web OS",
+      "path": "source/Kimi_Agent_\u2705Web Linux /app",
+      "type": "tsx-react-body",
+      "mode": "build/ingest",
+      "notes": "React/Vite fake Linux desktop OS source; preserved as selectable body and build target, not thrown away."
+    },
+    {
+      "id": "body.morph-rn",
+      "name": "Morph React Native Substrate",
+      "path": "source/morph-substrate (3)-1",
+      "type": "tsx-react-native-substrate",
+      "mode": "build/ingest",
+      "notes": "React Native/Expo morph substrate; registered as portable device substrate source."
+    },
+    {
+      "id": "body.synthia-life",
+      "name": "Synthia Life Agent Empire",
+      "path": "source/joe-resonance-unified-substrate-1/source/synthia-life-agent-empire (1).html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Agentic life/emergent agent empire body."
+    },
+    {
+      "id": "body.morph-os-substrate",
+      "name": "Morph OS Substrate",
+      "path": "source/joe-resonance-unified-substrate-1/source/morph-os-substrate (2).html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Native morph OS substrate artifact."
+    },
+    {
+      "id": "body.v6",
+      "name": "Resonance OS v6 Systems",
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-v6 (2).html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "v6 systems body."
+    },
+    {
+      "id": "body.v4-agent-registry",
+      "name": "Resonance v4 Agent Registry",
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-v4-agent-registry.html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Agent registry lineage."
+    },
+    {
+      "id": "body.v4-plasmic",
+      "name": "Resonance v4 Plasmic Shell",
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-v4-plasmic.html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Plasmic shell lineage preserved."
+    },
+    {
+      "id": "body.combined",
+      "name": "Resonance Combined Substrate",
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-combined-substrate-1.html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Combined substrate lineage."
+    },
+    {
+      "id": "body.morph",
+      "name": "Resonance Morph Body",
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-morph (1).html",
+      "type": "live-html-body",
+      "mode": "online/offline",
+      "notes": "Morph-specific body lineage."
+    }
+  ],
+  "kimi_detected_apps": [
+    {
+      "id": "desk-home",
+      "name": "Home",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    },
+    {
+      "id": "desk-trash",
+      "name": "Trash",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    },
+    {
+      "id": "desk-text",
+      "name": "Text Editor",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    },
+    {
+      "id": "desk-terminal",
+      "name": "Terminal",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    },
+    {
+      "id": "desk-settings",
+      "name": "Settings",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    },
+    {
+      "id": "desk-browser",
+      "name": "Web Browser",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    },
+    {
+      "id": "desk-calendar",
+      "name": "Calendar",
+      "source": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx"
+    }
+  ],
+  "files": [
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/.gitignore",
+      "name": ".gitignore",
+      "size": 28,
+      "kind": "source",
+      "sha": "877c8d36f5cd89e4"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/README.md",
+      "name": "README.md",
+      "size": 2555,
+      "kind": "support-artifact",
+      "sha": "f58b5b17f83db63c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/components.json",
+      "name": "components.json",
+      "size": 461,
+      "kind": "support-artifact",
+      "sha": "22643b642f17cd81"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/eslint.config.js",
+      "name": "eslint.config.js",
+      "size": 616,
+      "kind": "code-artifact",
+      "sha": "4efe97b16d1200fa"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/index.html",
+      "name": "index.html",
+      "size": 294,
+      "kind": "html-body",
+      "sha": "3c39d063db5c1a79"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/info.md",
+      "name": "info.md",
+      "size": 1385,
+      "kind": "support-artifact",
+      "sha": "e86b40922c19326c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/package-lock.json",
+      "name": "package-lock.json",
+      "size": 303263,
+      "kind": "support-artifact",
+      "sha": "2c8f4d18c15fd0fa"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/package.json",
+      "name": "package.json",
+      "size": 2568,
+      "kind": "support-artifact",
+      "sha": "cc7d28f3366a54ad"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/postcss.config.js",
+      "name": "postcss.config.js",
+      "size": 80,
+      "kind": "code-artifact",
+      "sha": "190c877db466995b"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/public/wallpaper-default.jpg",
+      "name": "wallpaper-default.jpg",
+      "size": 56240,
+      "kind": "source",
+      "sha": "a1dca9946897c687"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/App.css",
+      "name": "App.css",
+      "size": 606,
+      "kind": "support-artifact",
+      "sha": "a0715e0a09edbd0f"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/App.tsx",
+      "name": "App.tsx",
+      "size": 8236,
+      "kind": "code-artifact",
+      "sha": "ad08265c8f102821"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ApiTester.tsx",
+      "name": "ApiTester.tsx",
+      "size": 21177,
+      "kind": "code-artifact",
+      "sha": "2792210695dd480a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/AppRouter.tsx",
+      "name": "AppRouter.tsx",
+      "size": 5371,
+      "kind": "code-artifact",
+      "sha": "d170c1a73028be52"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ArchiveManager.tsx",
+      "name": "ArchiveManager.tsx",
+      "size": 16257,
+      "kind": "code-artifact",
+      "sha": "d15e44a6a2e9ec66"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/AsciiArt.tsx",
+      "name": "AsciiArt.tsx",
+      "size": 19336,
+      "kind": "code-artifact",
+      "sha": "221612697faaea9a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Base64Tool.tsx",
+      "name": "Base64Tool.tsx",
+      "size": 16467,
+      "kind": "code-artifact",
+      "sha": "b00abbad030b254b"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Browser.tsx",
+      "name": "Browser.tsx",
+      "size": 22291,
+      "kind": "code-artifact",
+      "sha": "f9fe6c6be5d1531b"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Calculator.tsx",
+      "name": "Calculator.tsx",
+      "size": 14705,
+      "kind": "code-artifact",
+      "sha": "e4b54f5dae340ab0"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Calendar.tsx",
+      "name": "Calendar.tsx",
+      "size": 25878,
+      "kind": "code-artifact",
+      "sha": "e4c204c00af09d62"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Chat.tsx",
+      "name": "Chat.tsx",
+      "size": 21058,
+      "kind": "code-artifact",
+      "sha": "7434f76b1445bb14"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Chess.tsx",
+      "name": "Chess.tsx",
+      "size": 22575,
+      "kind": "code-artifact",
+      "sha": "1510932ba30bcc51"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Clock.tsx",
+      "name": "Clock.tsx",
+      "size": 24691,
+      "kind": "code-artifact",
+      "sha": "3a1fb33c810b82b9"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/CodeEditor.tsx",
+      "name": "CodeEditor.tsx",
+      "size": 19630,
+      "kind": "code-artifact",
+      "sha": "537e73b72e0ea1dd"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ColorPalette.tsx",
+      "name": "ColorPalette.tsx",
+      "size": 17330,
+      "kind": "code-artifact",
+      "sha": "7b53ba2a264dff85"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ColorPicker.tsx",
+      "name": "ColorPicker.tsx",
+      "size": 18264,
+      "kind": "code-artifact",
+      "sha": "5ea03867d32e29a9"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Contacts.tsx",
+      "name": "Contacts.tsx",
+      "size": 15392,
+      "kind": "code-artifact",
+      "sha": "e437fe02634a9101"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/DocumentViewer.tsx",
+      "name": "DocumentViewer.tsx",
+      "size": 13406,
+      "kind": "code-artifact",
+      "sha": "52f185dbf42b39cf"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Drawing.tsx",
+      "name": "Drawing.tsx",
+      "size": 15955,
+      "kind": "code-artifact",
+      "sha": "a942fa956bd1e412"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Email.tsx",
+      "name": "Email.tsx",
+      "size": 24242,
+      "kind": "code-artifact",
+      "sha": "2aab89fa02746400"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/FileManager.tsx",
+      "name": "FileManager.tsx",
+      "size": 16985,
+      "kind": "code-artifact",
+      "sha": "cdc965018648b372"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/FlappyBird.tsx",
+      "name": "FlappyBird.tsx",
+      "size": 10139,
+      "kind": "code-artifact",
+      "sha": "dbed69d0e0612c45"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/FtpClient.tsx",
+      "name": "FtpClient.tsx",
+      "size": 15225,
+      "kind": "code-artifact",
+      "sha": "6a8c3ff04851a2e3"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Game2048.tsx",
+      "name": "Game2048.tsx",
+      "size": 11875,
+      "kind": "code-artifact",
+      "sha": "8f50d765e5df2f17"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/GitClient.tsx",
+      "name": "GitClient.tsx",
+      "size": 21208,
+      "kind": "code-artifact",
+      "sha": "d56a0d64e08d2673"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ImageGallery.tsx",
+      "name": "ImageGallery.tsx",
+      "size": 12974,
+      "kind": "code-artifact",
+      "sha": "e4753244bee816ec"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ImageViewer.tsx",
+      "name": "ImageViewer.tsx",
+      "size": 12346,
+      "kind": "code-artifact",
+      "sha": "4ff338be8fef0ee6"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/JsonFormatter.tsx",
+      "name": "JsonFormatter.tsx",
+      "size": 16367,
+      "kind": "code-artifact",
+      "sha": "0220573bb2acbc3c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/MarkdownPreview.tsx",
+      "name": "MarkdownPreview.tsx",
+      "size": 13950,
+      "kind": "code-artifact",
+      "sha": "38fa6a9913e2c9a5"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/MatrixRain.tsx",
+      "name": "MatrixRain.tsx",
+      "size": 9687,
+      "kind": "code-artifact",
+      "sha": "365733d60a8361c3"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/MediaConverter.tsx",
+      "name": "MediaConverter.tsx",
+      "size": 13987,
+      "kind": "code-artifact",
+      "sha": "c1d4cad67cca7ef9"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Memory.tsx",
+      "name": "Memory.tsx",
+      "size": 11767,
+      "kind": "code-artifact",
+      "sha": "bc960c1505e66030"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Minesweeper.tsx",
+      "name": "Minesweeper.tsx",
+      "size": 13023,
+      "kind": "code-artifact",
+      "sha": "21f3ce2c52fec23a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/MusicPlayer.tsx",
+      "name": "MusicPlayer.tsx",
+      "size": 11696,
+      "kind": "code-artifact",
+      "sha": "27d4bae38f8b90aa"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/NetworkTools.tsx",
+      "name": "NetworkTools.tsx",
+      "size": 15096,
+      "kind": "code-artifact",
+      "sha": "24ea9a70c87b7f93"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Notes.tsx",
+      "name": "Notes.tsx",
+      "size": 19647,
+      "kind": "code-artifact",
+      "sha": "e00375c90cc9b726"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/PasswordManager.tsx",
+      "name": "PasswordManager.tsx",
+      "size": 13369,
+      "kind": "code-artifact",
+      "sha": "6c77954df0f1ffda"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/PhotoEditor.tsx",
+      "name": "PhotoEditor.tsx",
+      "size": 15204,
+      "kind": "code-artifact",
+      "sha": "dfed050084587df7"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Pong.tsx",
+      "name": "Pong.tsx",
+      "size": 14876,
+      "kind": "code-artifact",
+      "sha": "03bf9a7cda622924"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/RegexTester.tsx",
+      "name": "RegexTester.tsx",
+      "size": 18132,
+      "kind": "code-artifact",
+      "sha": "fb329d0bb5516acb"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Reminders.tsx",
+      "name": "Reminders.tsx",
+      "size": 11571,
+      "kind": "code-artifact",
+      "sha": "9c820cd0505723b9"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/RssReader.tsx",
+      "name": "RssReader.tsx",
+      "size": 22509,
+      "kind": "code-artifact",
+      "sha": "de7189affa1bd9ec"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/ScreenRecorder.tsx",
+      "name": "ScreenRecorder.tsx",
+      "size": 17211,
+      "kind": "code-artifact",
+      "sha": "cd590b994d375b2b"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Settings.tsx",
+      "name": "Settings.tsx",
+      "size": 22649,
+      "kind": "code-artifact",
+      "sha": "99a840af0d829a1f"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Snake.tsx",
+      "name": "Snake.tsx",
+      "size": 11330,
+      "kind": "code-artifact",
+      "sha": "21c1aedd0dfe6dd0"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Solitaire.tsx",
+      "name": "Solitaire.tsx",
+      "size": 17740,
+      "kind": "code-artifact",
+      "sha": "0489390011623dd1"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Spreadsheet.tsx",
+      "name": "Spreadsheet.tsx",
+      "size": 17502,
+      "kind": "code-artifact",
+      "sha": "8f1f4848c38cf377"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Sudoku.tsx",
+      "name": "Sudoku.tsx",
+      "size": 16007,
+      "kind": "code-artifact",
+      "sha": "f31c3649bd4bac6b"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/SystemMonitor.tsx",
+      "name": "SystemMonitor.tsx",
+      "size": 17530,
+      "kind": "code-artifact",
+      "sha": "40aa7ddf0e223f22"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Terminal.tsx",
+      "name": "Terminal.tsx",
+      "size": 13265,
+      "kind": "code-artifact",
+      "sha": "2ee4a440fc0473eb"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Tetris.tsx",
+      "name": "Tetris.tsx",
+      "size": 16694,
+      "kind": "code-artifact",
+      "sha": "90590698871f54da"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/TextEditor.tsx",
+      "name": "TextEditor.tsx",
+      "size": 19769,
+      "kind": "code-artifact",
+      "sha": "9c893ae811c7e80a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/TicTacToe.tsx",
+      "name": "TicTacToe.tsx",
+      "size": 10064,
+      "kind": "code-artifact",
+      "sha": "b895c86b1414c6d3"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Todo.tsx",
+      "name": "Todo.tsx",
+      "size": 17771,
+      "kind": "code-artifact",
+      "sha": "a9f4b840da51ebc7"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/VideoPlayer.tsx",
+      "name": "VideoPlayer.tsx",
+      "size": 13599,
+      "kind": "code-artifact",
+      "sha": "ab28a0e4ea922494"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/VoiceRecorder.tsx",
+      "name": "VoiceRecorder.tsx",
+      "size": 14327,
+      "kind": "code-artifact",
+      "sha": "5fbb9e5e5a0b678a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Weather.tsx",
+      "name": "Weather.tsx",
+      "size": 23746,
+      "kind": "code-artifact",
+      "sha": "84a24f3f4b857ffd"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/Whiteboard.tsx",
+      "name": "Whiteboard.tsx",
+      "size": 14832,
+      "kind": "code-artifact",
+      "sha": "aa7d22e6d2df4175"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/apps/registry.ts",
+      "name": "registry.ts",
+      "size": 13984,
+      "kind": "code-artifact",
+      "sha": "108b9cc99fb98c43"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/AppLauncher.tsx",
+      "name": "AppLauncher.tsx",
+      "size": 9158,
+      "kind": "code-artifact",
+      "sha": "4b3eb9b6f9ee7deb"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/BootSequence.tsx",
+      "name": "BootSequence.tsx",
+      "size": 5152,
+      "kind": "code-artifact",
+      "sha": "b1986d80428c1a4e"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ContextMenu.tsx",
+      "name": "ContextMenu.tsx",
+      "size": 4690,
+      "kind": "code-artifact",
+      "sha": "624b3eec962ec741"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/Desktop.tsx",
+      "name": "Desktop.tsx",
+      "size": 6673,
+      "kind": "code-artifact",
+      "sha": "dd5a75bcfe0a2d71"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/Dock.tsx",
+      "name": "Dock.tsx",
+      "size": 6959,
+      "kind": "code-artifact",
+      "sha": "6c3aa1d17119a175"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/LoginScreen.tsx",
+      "name": "LoginScreen.tsx",
+      "size": 5938,
+      "kind": "code-artifact",
+      "sha": "539591c01c0a5c9a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/NotImplemented.tsx",
+      "name": "NotImplemented.tsx",
+      "size": 2082,
+      "kind": "code-artifact",
+      "sha": "2ab992f6e2c3d61c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/NotificationCenter.tsx",
+      "name": "NotificationCenter.tsx",
+      "size": 7447,
+      "kind": "code-artifact",
+      "sha": "c3a68b2e03d39a01"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/NotificationSystem.tsx",
+      "name": "NotificationSystem.tsx",
+      "size": 4621,
+      "kind": "code-artifact",
+      "sha": "1dbf6ad2c5cd4324"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/TopPanel.tsx",
+      "name": "TopPanel.tsx",
+      "size": 7670,
+      "kind": "code-artifact",
+      "sha": "d570cb5a03e1114f"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/WindowFrame.tsx",
+      "name": "WindowFrame.tsx",
+      "size": 11640,
+      "kind": "code-artifact",
+      "sha": "59672d00a7305c17"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/WindowManager.tsx",
+      "name": "WindowManager.tsx",
+      "size": 757,
+      "kind": "code-artifact",
+      "sha": "43bbe0c5dca5f88c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/accordion.tsx",
+      "name": "accordion.tsx",
+      "size": 2039,
+      "kind": "code-artifact",
+      "sha": "1e00288c7eee7238"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/alert-dialog.tsx",
+      "name": "alert-dialog.tsx",
+      "size": 3850,
+      "kind": "code-artifact",
+      "sha": "683cf8b6c3b0c29f"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/alert.tsx",
+      "name": "alert.tsx",
+      "size": 1614,
+      "kind": "code-artifact",
+      "sha": "49d8311589b810b1"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/aspect-ratio.tsx",
+      "name": "aspect-ratio.tsx",
+      "size": 280,
+      "kind": "code-artifact",
+      "sha": "6a75117416aa8920"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/avatar.tsx",
+      "name": "avatar.tsx",
+      "size": 1083,
+      "kind": "code-artifact",
+      "sha": "e637ab3522c01631"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/badge.tsx",
+      "name": "badge.tsx",
+      "size": 1633,
+      "kind": "code-artifact",
+      "sha": "e7455feb113b38c5"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/breadcrumb.tsx",
+      "name": "breadcrumb.tsx",
+      "size": 2357,
+      "kind": "code-artifact",
+      "sha": "22f3f4c13ed1085c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/button-group.tsx",
+      "name": "button-group.tsx",
+      "size": 2209,
+      "kind": "code-artifact",
+      "sha": "ccbf09097f5ebf2e"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/button.tsx",
+      "name": "button.tsx",
+      "size": 2218,
+      "kind": "code-artifact",
+      "sha": "5a5c4b8b60a8a80b"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/calendar.tsx",
+      "name": "calendar.tsx",
+      "size": 7793,
+      "kind": "code-artifact",
+      "sha": "c8e67d15d8622135"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/card.tsx",
+      "name": "card.tsx",
+      "size": 1987,
+      "kind": "code-artifact",
+      "sha": "2040cdff27cd1ed7"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/carousel.tsx",
+      "name": "carousel.tsx",
+      "size": 5542,
+      "kind": "code-artifact",
+      "sha": "10c5388b66d98f0c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/chart.tsx",
+      "name": "chart.tsx",
+      "size": 10069,
+      "kind": "code-artifact",
+      "sha": "39a2fde544144e0e"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/checkbox.tsx",
+      "name": "checkbox.tsx",
+      "size": 1219,
+      "kind": "code-artifact",
+      "sha": "a8292972a5b81eff"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/collapsible.tsx",
+      "name": "collapsible.tsx",
+      "size": 786,
+      "kind": "code-artifact",
+      "sha": "661444318605c90d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/command.tsx",
+      "name": "command.tsx",
+      "size": 4804,
+      "kind": "code-artifact",
+      "sha": "416cdc19eb9e7301"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/context-menu.tsx",
+      "name": "context-menu.tsx",
+      "size": 8274,
+      "kind": "code-artifact",
+      "sha": "70e547a9bececcc9"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/dialog.tsx",
+      "name": "dialog.tsx",
+      "size": 3981,
+      "kind": "code-artifact",
+      "sha": "6333f1124e85ff25"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/drawer.tsx",
+      "name": "drawer.tsx",
+      "size": 4255,
+      "kind": "code-artifact",
+      "sha": "0c9464ed4f95207f"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/dropdown-menu.tsx",
+      "name": "dropdown-menu.tsx",
+      "size": 8410,
+      "kind": "code-artifact",
+      "sha": "ba022169876b487c"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/empty.tsx",
+      "name": "empty.tsx",
+      "size": 2396,
+      "kind": "code-artifact",
+      "sha": "584b491f9eb69f80"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/field.tsx",
+      "name": "field.tsx",
+      "size": 6145,
+      "kind": "code-artifact",
+      "sha": "e9dcb51b16e5f235"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/form.tsx",
+      "name": "form.tsx",
+      "size": 3764,
+      "kind": "code-artifact",
+      "sha": "a12f73507ab613e9"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/hover-card.tsx",
+      "name": "hover-card.tsx",
+      "size": 1532,
+      "kind": "code-artifact",
+      "sha": "031f6a309d87c8e4"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/input-group.tsx",
+      "name": "input-group.tsx",
+      "size": 5065,
+      "kind": "code-artifact",
+      "sha": "c0df02569e483db8"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/input-otp.tsx",
+      "name": "input-otp.tsx",
+      "size": 2240,
+      "kind": "code-artifact",
+      "sha": "7fd7ed5273f849cd"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/input.tsx",
+      "name": "input.tsx",
+      "size": 962,
+      "kind": "code-artifact",
+      "sha": "56b7fd30208addbc"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/item.tsx",
+      "name": "item.tsx",
+      "size": 4494,
+      "kind": "code-artifact",
+      "sha": "6d64b75626074924"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/kbd.tsx",
+      "name": "kbd.tsx",
+      "size": 862,
+      "kind": "code-artifact",
+      "sha": "886e04c83aaa016d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/label.tsx",
+      "name": "label.tsx",
+      "size": 611,
+      "kind": "code-artifact",
+      "sha": "9ec42c8a57e82311"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/menubar.tsx",
+      "name": "menubar.tsx",
+      "size": 8380,
+      "kind": "code-artifact",
+      "sha": "b4be4da586ce1288"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/navigation-menu.tsx",
+      "name": "navigation-menu.tsx",
+      "size": 6664,
+      "kind": "code-artifact",
+      "sha": "d71f57fe0f365541"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/pagination.tsx",
+      "name": "pagination.tsx",
+      "size": 2717,
+      "kind": "code-artifact",
+      "sha": "374ad135c3d4ff3e"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/popover.tsx",
+      "name": "popover.tsx",
+      "size": 1635,
+      "kind": "code-artifact",
+      "sha": "29a217781737bbf5"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/progress.tsx",
+      "name": "progress.tsx",
+      "size": 726,
+      "kind": "code-artifact",
+      "sha": "9e36ca3f10bc56b6"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/radio-group.tsx",
+      "name": "radio-group.tsx",
+      "size": 1466,
+      "kind": "code-artifact",
+      "sha": "b12ca5cef859dd75"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/resizable.tsx",
+      "name": "resizable.tsx",
+      "size": 1980,
+      "kind": "code-artifact",
+      "sha": "4634b0a700b91e5d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/scroll-area.tsx",
+      "name": "scroll-area.tsx",
+      "size": 1645,
+      "kind": "code-artifact",
+      "sha": "1c5d0b242d051384"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/select.tsx",
+      "name": "select.tsx",
+      "size": 6344,
+      "kind": "code-artifact",
+      "sha": "68fc754d3042f9fe"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/separator.tsx",
+      "name": "separator.tsx",
+      "size": 699,
+      "kind": "code-artifact",
+      "sha": "e9dddbd8dbbc0ecc"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/sheet.tsx",
+      "name": "sheet.tsx",
+      "size": 4076,
+      "kind": "code-artifact",
+      "sha": "fbe9b257fd95b986"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/sidebar.tsx",
+      "name": "sidebar.tsx",
+      "size": 21638,
+      "kind": "code-artifact",
+      "sha": "6074d8027b4bc9ea"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/skeleton.tsx",
+      "name": "skeleton.tsx",
+      "size": 276,
+      "kind": "code-artifact",
+      "sha": "f2aea81d8baf2b62"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/slider.tsx",
+      "name": "slider.tsx",
+      "size": 1996,
+      "kind": "code-artifact",
+      "sha": "640996327017c397"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/sonner.tsx",
+      "name": "sonner.tsx",
+      "size": 1020,
+      "kind": "code-artifact",
+      "sha": "a3868f2a8aafd8e2"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/spinner.tsx",
+      "name": "spinner.tsx",
+      "size": 331,
+      "kind": "code-artifact",
+      "sha": "3e6e6e8d37fb4069"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/switch.tsx",
+      "name": "switch.tsx",
+      "size": 1177,
+      "kind": "code-artifact",
+      "sha": "17f2390d98e8ce4d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/table.tsx",
+      "name": "table.tsx",
+      "size": 2434,
+      "kind": "code-artifact",
+      "sha": "95e3ef5db88b3bbf"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/tabs.tsx",
+      "name": "tabs.tsx",
+      "size": 1969,
+      "kind": "code-artifact",
+      "sha": "e8469e599381cf02"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/textarea.tsx",
+      "name": "textarea.tsx",
+      "size": 759,
+      "kind": "code-artifact",
+      "sha": "de4e9fb0fd8e8ed1"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/toggle-group.tsx",
+      "name": "toggle-group.tsx",
+      "size": 2300,
+      "kind": "code-artifact",
+      "sha": "c63c671fe328f2c1"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/toggle.tsx",
+      "name": "toggle.tsx",
+      "size": 1556,
+      "kind": "code-artifact",
+      "sha": "ab2e52debb864518"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/components/ui/tooltip.tsx",
+      "name": "tooltip.tsx",
+      "size": 1892,
+      "kind": "code-artifact",
+      "sha": "cbc12f4086448f8a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/use-mobile.ts",
+      "name": "use-mobile.ts",
+      "size": 565,
+      "kind": "code-artifact",
+      "sha": "ad0936f84f1df79d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useFileSystem.ts",
+      "name": "useFileSystem.ts",
+      "size": 11718,
+      "kind": "code-artifact",
+      "sha": "9b691d4a800297bc"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/hooks/useOSStore.tsx",
+      "name": "useOSStore.tsx",
+      "size": 16338,
+      "kind": "code-artifact",
+      "sha": "a3e3cc9da6c9b08a"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/index.css",
+      "name": "index.css",
+      "size": 4495,
+      "kind": "support-artifact",
+      "sha": "80b7117640dbd361"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/lib/utils.ts",
+      "name": "utils.ts",
+      "size": 166,
+      "kind": "code-artifact",
+      "sha": "7c8c3dfc0cdd370d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/main.tsx",
+      "name": "main.tsx",
+      "size": 157,
+      "kind": "code-artifact",
+      "sha": "aeba5b7266d81449"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/pages/Home.tsx",
+      "name": "Home.tsx",
+      "size": 425,
+      "kind": "code-artifact",
+      "sha": "a5bce711417781cb"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/src/types/index.ts",
+      "name": "index.ts",
+      "size": 6499,
+      "kind": "code-artifact",
+      "sha": "fdb57611c1a6e18d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/tailwind.config.js",
+      "name": "tailwind.config.js",
+      "size": 2777,
+      "kind": "code-artifact",
+      "sha": "149b62bbe6c8c83d"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/tsconfig.app.json",
+      "name": "tsconfig.app.json",
+      "size": 817,
+      "kind": "support-artifact",
+      "sha": "ced3199a9308439e"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/tsconfig.json",
+      "name": "tsconfig.json",
+      "size": 232,
+      "kind": "support-artifact",
+      "sha": "a389bfb0309454cd"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/tsconfig.node.json",
+      "name": "tsconfig.node.json",
+      "size": 653,
+      "kind": "support-artifact",
+      "sha": "c3dd0fb522feba35"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /app/vite.config.ts",
+      "name": "vite.config.ts",
+      "size": 387,
+      "kind": "code-artifact",
+      "sha": "ba9676a351a36c47"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux /plan.md",
+      "name": "plan.md",
+      "size": 5035,
+      "kind": "support-artifact",
+      "sha": "dfaaf4198ce74639"
+    },
+    {
+      "path": "source/Kimi_Agent_\u2705Web Linux .zip",
+      "name": "Kimi_Agent_\u2705Web Linux .zip",
+      "size": 462500,
+      "kind": "archive-artifact",
+      "sha": "71e333c4962f1cc9"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/joe-resonance-unified-substrate.html",
+      "name": "joe-resonance-unified-substrate.html",
+      "size": 471778,
+      "kind": "html-body",
+      "sha": "98c1da003bcde0f4"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/morph-os-substrate (2).html",
+      "name": "morph-os-substrate (2).html",
+      "size": 59782,
+      "kind": "html-body",
+      "sha": "88ffb9071937834e"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/morph-substrate (2).zip",
+      "name": "morph-substrate (2).zip",
+      "size": 12758,
+      "kind": "archive-artifact",
+      "sha": "dcf582dfa796bd07"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-combined-substrate-1.html",
+      "name": "resonance-os-combined-substrate-1.html",
+      "size": 200385,
+      "kind": "html-body",
+      "sha": "0a798f5d0c66b23e"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-combined-substrate.html",
+      "name": "resonance-os-combined-substrate.html",
+      "size": 200385,
+      "kind": "html-body",
+      "sha": "0a798f5d0c66b23e"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-morph (1).html",
+      "name": "resonance-os-morph (1).html",
+      "size": 229150,
+      "kind": "html-body",
+      "sha": "684dcb0c04c91c37"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-morph.html",
+      "name": "resonance-os-morph.html",
+      "size": 229150,
+      "kind": "html-body",
+      "sha": "684dcb0c04c91c37"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-v4-agent-registry.html",
+      "name": "resonance-os-v4-agent-registry.html",
+      "size": 221833,
+      "kind": "html-body",
+      "sha": "92480390e8225f37"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-v4-plasmic.html",
+      "name": "resonance-os-v4-plasmic.html",
+      "size": 202267,
+      "kind": "html-body",
+      "sha": "38e9ce5ffafce000"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/resonance-os-v6 (2).html",
+      "name": "resonance-os-v6 (2).html",
+      "size": 237854,
+      "kind": "html-body",
+      "sha": "770a501639be9ee3"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1/source/synthia-life-agent-empire (1).html",
+      "name": "synthia-life-agent-empire (1).html",
+      "size": 52813,
+      "kind": "html-body",
+      "sha": "097f9c2c4a7c9596"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate-1.zip",
+      "name": "joe-resonance-unified-substrate-1.zip",
+      "size": 514926,
+      "kind": "archive-artifact",
+      "sha": "bd2cac07b25e05f3"
+    },
+    {
+      "path": "source/joe-resonance-unified-substrate.html",
+      "name": "joe-resonance-unified-substrate.html",
+      "size": 442699,
+      "kind": "html-body",
+      "sha": "3f6368636b8c6976"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/App.tsx",
+      "name": "App.tsx",
+      "size": 44113,
+      "kind": "code-artifact",
+      "sha": "22b2bd5b739d9f50"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/README.md",
+      "name": "README.md",
+      "size": 928,
+      "kind": "support-artifact",
+      "sha": "d97641e200a7ea25"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/app.json",
+      "name": "app.json",
+      "size": 942,
+      "kind": "support-artifact",
+      "sha": "1a0b6c07c4a063b6"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/eas.json",
+      "name": "eas.json",
+      "size": 324,
+      "kind": "support-artifact",
+      "sha": "8111e6c8479e3618"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/manifest.json",
+      "name": "manifest.json",
+      "size": 586,
+      "kind": "support-artifact",
+      "sha": "33ddaef0db9742ba"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/package.json",
+      "name": "package.json",
+      "size": 728,
+      "kind": "support-artifact",
+      "sha": "89b6cb11ebb6b573"
+    },
+    {
+      "path": "source/morph-substrate (3)-1/tsconfig.json",
+      "name": "tsconfig.json",
+      "size": 194,
+      "kind": "support-artifact",
+      "sha": "5fc60342eb12ad6a"
+    },
+    {
+      "path": "source/morph-substrate (3)-1.zip",
+      "name": "morph-substrate (3)-1.zip",
+      "size": 12303,
+      "kind": "archive-artifact",
+      "sha": "f5d5e2fee25fc1f5"
+    },
+    {
+      "path": "source/resonance-os-construct-grapesjs-webstudio-netlify/MERGE_NOTES.md",
+      "name": "MERGE_NOTES.md",
+      "size": 328,
+      "kind": "support-artifact",
+      "sha": "ae58d525914e68fc"
+    },
+    {
+      "path": "source/resonance-os-construct-grapesjs-webstudio-netlify/index.html",
+      "name": "index.html",
+      "size": 400114,
+      "kind": "html-body",
+      "sha": "3c267e325ae1b52f"
+    },
+    {
+      "path": "source/resonance-os-construct-grapesjs-webstudio-netlify.zip",
+      "name": "resonance-os-construct-grapesjs-webstudio-netlify.zip",
+      "size": 88865,
+      "kind": "archive-artifact",
+      "sha": "226507302472c988"
+    },
+    {
+      "path": "source/resonance-os-construct-grapesjs-webstudio.html",
+      "name": "resonance-os-construct-grapesjs-webstudio.html",
+      "size": 400114,
+      "kind": "html-body",
+      "sha": "3c267e325ae1b52f"
+    },
+    {
+      "path": "source/resonance-os-fixed-1.html",
+      "name": "resonance-os-fixed-1.html",
+      "size": 311737,
+      "kind": "html-body",
+      "sha": "6bb09ae42abf27b9"
+    },
+    {
+      "path": "source/resonance-os-fixed.html",
+      "name": "resonance-os-fixed.html",
+      "size": 311361,
+      "kind": "html-body",
+      "sha": "b056ecf3b1de36fe"
+    },
+    {
+      "path": "source/resonance-os-menu-fixed-1.html",
+      "name": "resonance-os-menu-fixed-1.html",
+      "size": 314917,
+      "kind": "html-body",
+      "sha": "2b2ad9aed04ea9bf"
+    },
+    {
+      "path": "source/resonance-os-menu-fixed.html",
+      "name": "resonance-os-menu-fixed.html",
+      "size": 314917,
+      "kind": "html-body",
+      "sha": "2b2ad9aed04ea9bf"
+    },
+    {
+      "path": "source/resonance-os-merged-1.html",
+      "name": "resonance-os-merged-1.html",
+      "size": 311314,
+      "kind": "html-body",
+      "sha": "31712bf99fbfa74e"
+    },
+    {
+      "path": "source/resonance-os-unified-fixed-package-2/resonance-os-unified-fixed.html",
+      "name": "resonance-os-unified-fixed.html",
+      "size": 442728,
+      "kind": "html-body",
+      "sha": "4d70ff1e5b4ba3d0"
+    },
+    {
+      "path": "source/resonance-os-unified-fixed-package-2.zip",
+      "name": "resonance-os-unified-fixed-package-2.zip",
+      "size": 102702,
+      "kind": "archive-artifact",
+      "sha": "0c100fee9ae1cbb5"
+    },
+    {
+      "path": "source/resonance-os-unified-fixed.html",
+      "name": "resonance-os-unified-fixed.html",
+      "size": 442724,
+      "kind": "html-body",
+      "sha": "05576e040221e0a9"
+    }
+  ]
+}
