@@ -1,8 +1,9 @@
-name: Unzip and scaffold repo
+name: Unzip and scaffold Resonance repo
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,19 +15,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
-      - name: Unzip files
+      - name: Unzip package and choose morphing substrate index
+        shell: bash
         run: |
-          for zip in $(find . -maxdepth 2 -name "*.zip"); do
-            echo "Unzipping $zip"
-            unzip -o "$zip" -d "$(dirname $zip)"
-            rm "$zip"
-          done
+          set -euo pipefail
 
-      - name: Commit extracted files
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add -A
-          git diff --cached --quiet || git commit -m "chore: unzip and scaffold files"
-          git push
+          echo "Repo before:"
+          find . -maxdepth 4 -type f | sort
+
+          rm -f index.html
+          rm -rf extracted
+
+          ZIP_FILE=$(find . -maxdepth 4 -type f -name '*.zip' | head -n 1 || true)
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "ERROR: No ZIP file found."
+            exit 1
+          fi
+
+          echo "Unzipping: $ZIP_FILE"
+          mkdir -p extracted
+          unzip -o "$ZIP_FILE" -d extracted
+
+          echo "HTML files found after unzip:"
+          find extracted -type f -iname '*.html' -o -iname '*.htm' | sort
+
+          HTML_FILE=$(find extracted -type f -iname 'resonance-beef-morphos.html' | head -n 1 || true)
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname '*beef*morphos*.html' | head -n 1 || true)
+          fi
+
+          then
