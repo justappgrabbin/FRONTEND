@@ -1,8 +1,9 @@
-name: Deploy Resonance MorphOS
+name: Deploy Resonance ZIP to Pages
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -11,59 +12,64 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: github-pages
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare Pages artifact from uploaded ZIP or HTML
+      - name: Build static site from uploaded ZIP or HTML
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p public
 
-          ZIP_FILE=""
-          if ls *.zip >/dev/null 2>&1; then
-            ZIP_FILE="$(ls -1 *.zip | head -n 1)"
+          rm -rf public extracted
+          mkdir -p public extracted
+
+          ZIP_FILE=$(find . -maxdepth 2 -type f -name '*.zip' | head -n 1 || true)
+
+          if [ -n "$ZIP_FILE" ]; then
             echo "Found ZIP: $ZIP_FILE"
             unzip -o "$ZIP_FILE" -d extracted
-            HTML_FILE="$(find extracted -type f \( -name '*.html' -o -name '*.htm' \) | head -n 1)"
-            if [ -z "$HTML_FILE" ]; then
-              echo "No HTML file found inside ZIP."
-              exit 1
-            fi
-            echo "Using HTML: $HTML_FILE"
-            cp "$HTML_FILE" public/index.html
-            cp -R extracted/* public/source-extracted/ || true
-          elif [ -f "index.html" ]; then
-            echo "Using existing index.html"
-            cp index.html public/index.html
           else
-            HTML_FILE="$(find . -maxdepth 2 -type f \( -name '*.html' -o -name '*.htm' \) | head -n 1)"
-            if [ -z "$HTML_FILE" ]; then
-              echo "No ZIP or HTML file found. Upload the Resonance package ZIP or an index.html file."
-              exit 1
-            fi
-            echo "Using HTML: $HTML_FILE"
-            cp "$HTML_FILE" public/index.html
+            echo "No ZIP found. Looking for HTML files."
+            find . -maxdepth 3 -type f \( -name '*.html' -o -name '*.htm' \) -not -path './public/*' -exec cp {} extracted/ \;
           fi
 
-          cat > public/.nojekyll <<'EOF'
-EOF
+          HTML_FILE=$(find extracted -type f -iname '*beef*morphos*.html' | head -n 1 || true)
 
-          cat > public/deploy-info.json <<'EOF'
-          {
-            "name": "Resonance Beef MorphOS",
-            "mode": "static-offline-first",
-            "backend": "optional-enhancement",
-            "notes": "Built from uploaded canonical package. ZIP source is preserved in repository when uploaded."
-          }
-EOF
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname '*resonance*final*.html' | head -n 1 || true)
+          fi
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname '*grapesjs*webstudio*.html' | head -n 1 || true)
+          fi
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f \( -iname '*.html' -o -iname '*.htm' \) | head -n 1 || true)
+          fi
+
+          if [ -z "$HTML_FILE" ]; then
+            echo "ERROR: No HTML file found to deploy."
+            echo "Files found:"
+            find . -maxdepth 4 -type f | sort
+            exit 1
+          fi
+
+          echo "Deploying HTML: $HTML_FILE"
+          cp "$HTML_FILE" public/index.html
+
+          mkdir -p public/source-vault
+          cp -R extracted/. public/source-vault/ || true
+
+          touch public/.nojekyll
+
+          printf '%s\n' '{' '  "name": "Resonance Beef MorphOS",' '  "deployment": "github-pages",' '  "source": "uploaded zip unpacked by workflow",' '  "runtime": "offline-first frontend with optional backend enhancement"' '}' > public/deploy-info.json
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -74,12 +80,12 @@ EOF
           path: public
 
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
