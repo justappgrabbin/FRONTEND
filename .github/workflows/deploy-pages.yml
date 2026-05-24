@@ -1,4 +1,4 @@
-name: Deploy Resonance ZIP to Pages
+name: Unzip and scaffold Resonance repo
 
 on:
   push:
@@ -7,40 +7,59 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: github-pages
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  build:
+  unzip:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
-      - name: Build static site from uploaded ZIP or HTML
+      - name: Unzip package and choose morphing substrate index
         shell: bash
         run: |
           set -euo pipefail
 
-          rm -rf public extracted
-          mkdir -p public extracted
-
-          ZIP_FILE=$(find . -maxdepth 2 -type f -name '*.zip' | head -n 1 || true)
-
-          if [ -n "$ZIP_FILE" ]; then
-            echo "Found ZIP: $ZIP_FILE"
-            unzip -o "$ZIP_FILE" -d extracted
-          else
-            echo "No ZIP found. Looking for HTML files."
-            find . -maxdepth 3 -type f \( -name '*.html' -o -name '*.htm' \) -not -path './public/*' -exec cp {} extracted/ \;
+          echo "Cleaning fake placeholder index if present"
+          if [ -f index.html ] && grep -q 'frontend_index.html' index.html; then
+            rm index.html
           fi
 
-          HTML_FILE=$(find extracted -type f -iname '*beef*morphos*.html' | head -n 1 || true)
+          mkdir -p extracted
+
+          ZIP_FILE=$(find . -maxdepth 2 -type f -name '*.zip' | head -n 1 || true)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "ERROR: No ZIP file found."
+            find . -maxdepth 3 -type f | sort
+            exit 1
+          fi
+
+          echo "Unzipping $ZIP_FILE"
+          unzip -o "$ZIP_FILE" -d extracted
+
+          echo "Available HTML files:"
+          find extracted -type f \( -iname '*.html' -o -iname '*.htm' \) | sort
+
+          HTML_FILE=$(find extracted -type f -iname 'resonance-beef-morphos.html' | head -n 1 || true)
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname '*beef*morphos*.html' | head -n 1 || true)
+          fi
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname '*morph*substrate*.html' | head -n 1 || true)
+          fi
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname '*unified*substrate*.html' | head -n 1 || true)
+          fi
+
+          if [ -z "$HTML_FILE" ]; then
+            HTML_FILE=$(find extracted -type f -iname 'resonance-phonyos-final.html' | head -n 1 || true)
+          fi
 
           if [ -z "$HTML_FILE" ]; then
             HTML_FILE=$(find extracted -type f -iname '*resonance*final*.html' | head -n 1 || true)
@@ -55,37 +74,30 @@ jobs:
           fi
 
           if [ -z "$HTML_FILE" ]; then
-            echo "ERROR: No HTML file found to deploy."
-            echo "Files found:"
-            find . -maxdepth 4 -type f | sort
+            echo "ERROR: No HTML file found inside ZIP."
             exit 1
           fi
 
-          echo "Deploying HTML: $HTML_FILE"
-          cp "$HTML_FILE" public/index.html
+          echo "Selected morphing substrate: $HTML_FILE"
+          cp "$HTML_FILE" index.html
 
-          mkdir -p public/source-vault
-          cp -R extracted/. public/source-vault/ || true
+          mkdir -p source-vault
+          cp -R extracted/. source-vault/
 
-          touch public/.nojekyll
+          touch .nojekyll
 
-          printf '%s\n' '{' '  "name": "Resonance Beef MorphOS",' '  "deployment": "github-pages",' '  "source": "uploaded zip unpacked by workflow",' '  "runtime": "offline-first frontend with optional backend enhancement"' '}' > public/deploy-info.json
+          cat > deploy-info.json <<'JSON'
+          {
+            "name": "Resonance Morphing Substrate",
+            "entry": "index.html",
+            "sourceVault": "source-vault",
+            "deployment": "static repo scaffold",
+            "backend": "optional enhancement"
+          }
+JSON
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: unzip package and set morphing substrate index"
+          git push
